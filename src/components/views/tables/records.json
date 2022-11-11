@@ -1,0 +1,60 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "fname": "elon",
+      "lname": "musk",
+      "email": "elonmusk@test.com",
+      "phone": "1234567890",
+      "image": "https://cdn.pixabay.com/photo/2015/12/01/20/28/road-1072823_960_720.jpg"
+    },
+    {
+      "fname": "jeff",
+      "lname": "bezos",
+      "email": "jffbezos@test.com",
+      "phone": "1234567890",
+      "image": "C:\\fakepath\\User.png",
+      "id": 2
+    },
+    {
+      "id": 3,
+      "fname": "daddy",
+      "lname": "yankee",
+      "email": "daddy@test.com",
+      "phone": "1234567890",
+      "image": "https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885_960_720.jpg"
+    },
+    {
+      "id": 4,
+      "fname": "alan",
+      "lname": "walker",
+      "email": "walker@test.com",
+      "phone": "1234567890",
+      "image": "https://cdn.pixabay.com/photo/2014/04/14/20/11/pink-324175_960_720.jpg"
+    },
+    {
+      "id": 6,
+      "fname": "MS",
+      "lname": "Dhoni",
+      "email": "dhoni@test.com",
+      "phone": "9606680149",
+      "image": "https://cdn.pixabay.com/photo/2012/03/01/00/55/flowers-19830_960_720.jpg"
+    },
+    {
+      "fname": "sumo",
+      "lname": "koocha",
+      "email": "sumo@test.com",
+      "phone": "8787456780",
+      "image": "https://ghavatars.staticblitz.com/parrajulio33.png",
+      "id": 7
+    },
+    {
+      "fname": "sumanth",
+      "lname": "s",
+      "email": "tezt@test.com",
+      "phone": "1234567890",
+      "image": "C:\\fakepath\\User.png",
+      "id": 8
+    }
+  ]
+}
