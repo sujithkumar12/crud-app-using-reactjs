@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
 import { AiFillEyeInvisible, AiFillEye } from "react-icons/ai";
 import { useNavigate } from "react-router-dom";
@@ -9,6 +9,7 @@ import {
   Input,
   Button,
   Container,
+  Form,
 } from "reactstrap";
 import { mailPattern, MainURL, nonstrongPwd } from "../../variables/constants";
 import { ToastContainer } from "react-toastify";
@@ -25,6 +26,12 @@ const LoginForm = () => {
   });
   const [error, setError] = useState("");
 
+  useEffect(() => {
+    if (localStorage.getItem("user-info")) {
+      navigate("/");
+    }
+  }, []);
+
   const handleChange = (event) => {
     if (event.target.name === "email") {
       if (mailPattern.test(event.target.value)) setIsEmailValid(true);
@@ -40,7 +47,7 @@ const LoginForm = () => {
     event.preventDefault();
     setError("");
 
-    //fetch method to get access token
+    // fetch method to get access token
     fetch(`${MainURL}/sign_in`, {
       method: "POST",
       headers: {
@@ -50,10 +57,9 @@ const LoginForm = () => {
     })
       .then((res) => res.json())
       .then((json) => {
-        if (json.responseCode == 200) {
+        if (json.responseCode === 200) {
           localStorage.setItem("user-info", json.responseData.access_token);
           navigate("/");
-          console.log("success");
         } else {
           setError("Email or Password incorrect");
           return;
@@ -76,8 +82,8 @@ const LoginForm = () => {
           Welcome back! Please enter your details.
         </p>
         {error && <p className="text-red-600 mt-4">{error}</p>}
-        <form onSubmit={(event) => handleSubmit(event)}>
-          <div className="mt-4">
+        <Form onSubmit={(event) => handleSubmit(event)}>
+          <Container className="mt-4">
             <label className="text-lg font-medium">Email</label>
             <FormGroup>
               <InputGroup
@@ -87,7 +93,6 @@ const LoginForm = () => {
                 <Input
                   placeholder="E-mail"
                   type="email"
-                  // value={data.email}
                   name="email"
                   className="w-full border-2 border-gray-100 rounded-xl p-4 mt-1 bg-transparent"
                   onChange={handleChange}
@@ -112,7 +117,6 @@ const LoginForm = () => {
                   className="form-control-alternative w-full border-2 border-gray-100 rounded-xl p-4 mt-1 bg-transparent"
                   id="password"
                   name="password"
-                  // value={data.password}
                   onChange={handleChange}
                   placeholder="Enter your password"
                   type={!passwordVisible ? "password" : "text"}
@@ -136,7 +140,7 @@ const LoginForm = () => {
                 character and 1 number. Must be atleast 8 characters
               </div>
             </FormGroup>
-          </div>
+          </Container>
           <div className="mt-8 flex flex-col gap-y-4">
             <Button
               type="submit"
@@ -146,8 +150,7 @@ const LoginForm = () => {
               Sign In
             </Button>
           </div>
-        </form>
-        {/* <Link to="/register">Register</Link> */}
+        </Form>
       </div>
       <ToastContainer />
     </Container>

@@ -4,14 +4,23 @@ import Navbar from "../Navbar/Navbarr";
 import Footer from "../Footer/Footer";
 import Content from "../content/Content";
 import TableData from "./tables/TableView";
-import { useUserAuth } from "../store/UserAuthContext";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 const DashboardView = () => {
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (localStorage.getItem("user-info")) {
+      navigate("/");
+    } else {
+      navigate("/login");
+    }
+  }, []);
 
   return (
     <Container>
       <Sidebar>
-        <Navbar />
         <Content>
           <TableData />
         </Content>

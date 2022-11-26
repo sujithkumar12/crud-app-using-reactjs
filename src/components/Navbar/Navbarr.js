@@ -2,18 +2,15 @@ import React, { useState } from "react";
 import { Container } from "reactstrap";
 import { GiHamburgerMenu } from "react-icons/gi";
 import "./Navbarr.css";
-import { useUserAuth } from "../store/UserAuthContext";
+import { useNavigate } from "react-router-dom";
 
 const Navbarr = () => {
   const [showMediaIcons, setshowMediaIcons] = useState(false);
-  const { logOut } = useUserAuth();
+  const navigate = useNavigate();
 
   const handleLogOut = async () => {
-    try {
-      await logOut();
-    } catch(err) {
-      console.log(err.message);
-    }
+    localStorage.clear();
+    navigate("/login");
   };
 
   return (

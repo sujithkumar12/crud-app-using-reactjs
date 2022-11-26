@@ -9,7 +9,7 @@ const NotFound = () => {
   return (
     <Container>
       <Sidebar>
-        <Navbar />
+        {/* <Navbar /> */}
         <Content>
           <p className="text-center text-2xl font-bold h-screen">404 - Page Not Found</p>
         </Content>

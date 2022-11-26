@@ -1,47 +1,140 @@
+import axios from "axios";
 import React, { useContext, useEffect, useState } from "react";
+import { toast } from "react-toastify";
 import { Button, Container, FormGroup, Input, InputGroup } from "reactstrap";
+import {
+  MainURL,
+  image,
+  alphabetsPattern,
+  mailPattern,
+  phone,
+} from "../../../variables/constants";
 import idContext from "../../store/IdContext";
 
-function EditForm() {
+function EditForm({ onClosee, forceUpdate }) {
   const [fname, setIsFname] = useState("");
   const [lname, setIsLname] = useState("");
   const [email, setIsEmail] = useState("");
-  const [phone, setIsPhone] = useState("");
-  const [image, setIsFile] = useState("");
+  const [isPhone, setIsPhone] = useState("");
+  const [isImage, setIsFile] = useState("");
+
+  const [isFnameValid, setIsFnameValid] = useState(true);
+  const [isLnameValid, setIsLnameValid] = useState(true);
+  const [isEmailValid, setIsEmailValid] = useState(true);
+  const [isPhoneValid, setIsPhoneValid] = useState(true);
+  const [isFileValid, setIsFileValid] = useState(true);
 
   const idd = useContext(idContext);
 
+  const [isPreImg, setIsPreImg] = useState(idd.editImage);
+
+  const toastOptions = {
+    position: "bottom-right",
+    autoClose: 8000,
+    pauseOnHover: true,
+    draggable: true,
+    theme: "dark",
+  };
+
   useEffect(() => {
-    fetch("http://localhost:8000/users/" + idd)
-      .then((res) => {
-        return res.json();
-      })
-      .then((resp) => {
-        setIsFname(resp.fname);
-        setIsLname(resp.lname);
-        setIsEmail(resp.email);
-        setIsPhone(resp.phone);
-        setIsFile(resp.image);
-      })
-      .catch((err) => {
-        console.log(err.message);
-      });
-  }, []);
+    setIsFname(idd.editFname);
+    setIsLname(idd.editLname);
+    setIsEmail(idd.editEmail);
+    setIsPhone(idd.editPhone);
+    setIsFile(idd.editImage);
+  }, [
+    idd.editFname,
+    idd.editLname,
+    idd.editEmail,
+    idd.editPhone,
+    idd.editImage,
+  ]);
+
+  const handleFnameChange = (event) => {
+    if (alphabetsPattern.test(event.target.value)) {
+      setIsFnameValid(true);
+    } else {
+      setIsFnameValid(false);
+    }
+    setIsFname(event.target.value);
+  };
+
+  const handleLnameChange = (event) => {
+    if (alphabetsPattern.test(event.target.value)) {
+      setIsLnameValid(true);
+    } else {
+      setIsLnameValid(false);
+    }
+    setIsLname(event.target.value);
+  };
+
+  const handleEmailChange = (event) => {
+    if (mailPattern.test(event.target.value)) {
+      setIsEmailValid(true);
+    } else {
+      setIsEmailValid(false);
+    }
+    setIsEmail(event.target.value);
+  };
+
+  const handlePhoneChange = (event) => {
+    if (phone.test(event.target.value)) {
+      setIsPhoneValid(true);
+    } else {
+      setIsPhoneValid(false);
+    }
+    setIsPhone(event.target.value);
+  };
+
+  const handleFileChange = (event) => {
+    const reader = new FileReader();
+    reader.onload = () => {
+      if (reader.readyState === 2) {
+        setIsPreImg(reader.result);
+      }
+    };
+    reader.readAsDataURL(event.target.files[0]);
+    if (image.test(event.target.value)) {
+      setIsFile(event.target.files[0]);
+      setIsFileValid(true);
+    } else {
+      setIsFileValid(false);
+    }
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const empData = { fname, lname, email, phone, image };
-    fetch("http://localhost:8000/users/" + idd, {
-      method: "PUT",
-      headers: { "content-type": "application/json" },
-      body: JSON.stringify(empData),
-    })
+    let formData = new FormData();
+
+    formData.append("first_name", fname);
+    formData.append("last_name", lname);
+    formData.append("phone", isPhone);
+    formData.append("email", email);
+    formData.append("image", isImage);
+
+    const userToken = localStorage.getItem("user-info");
+
+    const config = {
+      headers: {
+        "Content-Type": "multipart/form-data",
+        autherization: userToken,
+      },
+    };
+
+    axios
+      .put(`${MainURL}/update_profile/${idd.editId}`, formData, config)
       .then((res) => {
-        window.location.reload();
-        alert("data updated successfully");
+        if (res.data.responseCode === 200) {
+          toast.success("Data updated successfully", toastOptions);
+          onClosee(true);
+          forceUpdate();
+          // window.location.reload();
+        } else {
+          toast.warn(res.data.responseMessage, toastOptions);
+        }
       })
       .catch((err) => {
-        console.log(err.message);
+        toast.error(err, toastOptions);
       });
   };
 
@@ -65,9 +158,14 @@ function EditForm() {
                   name="fname"
                   value={fname}
                   className="w-full border-2 border-gray-100 rounded-xl p-4 mt-1 bg-transparent"
-                  onChange={(event) => setIsFname(event.target.value)}
+                  onChange={handleFnameChange}
                   required
                 />
+                {fname && !isFnameValid && (
+                  <p className="ml-4 text-red-500 bg-transparent mt-1 text-sm">
+                    Please enter valid name
+                  </p>
+                )}
               </InputGroup>
             </FormGroup>
 
@@ -83,9 +181,14 @@ function EditForm() {
                   value={lname}
                   name="lname"
                   className="w-full border-2 border-gray-100 rounded-xl p-4 mt-1 bg-transparent"
-                  onChange={(event) => setIsLname(event.target.value)}
+                  onChange={handleLnameChange}
                   required
                 />
+                {lname && !isLnameValid && (
+                  <p className="ml-4 text-red-500 bg-transparent mt-1 text-sm">
+                    Please enter valid name
+                  </p>
+                )}
               </InputGroup>
             </FormGroup>
 
@@ -101,9 +204,14 @@ function EditForm() {
                   name="email"
                   value={email}
                   className="w-full border-2 border-gray-100 rounded-xl p-4 mt-1 bg-transparent"
-                  onChange={(event) => setIsEmail(event.target.value)}
+                  onChange={handleEmailChange}
                   required
                 />
+                {email && !isEmailValid && (
+                  <p className="ml-4 text-red-500 bg-transparent mt-1 text-sm">
+                    Please enter valid email
+                  </p>
+                )}
               </InputGroup>
             </FormGroup>
 
@@ -115,14 +223,21 @@ function EditForm() {
               >
                 <Input
                   placeholder="1234567890"
-                  type="tel"
+                  type="number"
                   name="phone"
-                  value={phone}
+                  value={isPhone}
                   className="w-full border-2 border-gray-100 rounded-xl p-4 mt-1 bg-transparent"
-                  onChange={(event) => setIsPhone(event.target.value)}
+                  onChange={handlePhoneChange}
                   required
-                  pattern="[0-9]{10}"
+                  maxLength={10}
+                  minLength={10}
+                  // pattern="[0-9]{10}"
                 />
+                {isPhone && !isPhoneValid && (
+                  <p className="ml-4 text-red-500 bg-transparent mt-1 text-sm">
+                    Please enter valid phone number
+                  </p>
+                )}
               </InputGroup>
             </FormGroup>
 
@@ -135,19 +250,39 @@ function EditForm() {
                 <Input
                   type="file"
                   name="image"
-                  //   value={data.image}
-                  accept="image/*"
+                  accept="image/heic, image/jpeg, image/png, image/jpg"
                   className="w-full border-2 border-gray-100 rounded-xl p-4 mt-1 bg-transparent"
-                  onChange={(event) => setIsFile(event.target.value)}
-                  maxLength="200"
-                  required
+                  onChange={handleFileChange}
                 />
+                {isImage && !isFileValid && (
+                  <p className="ml-4 text-red-500 bg-transparent mt-1 text-sm">
+                    Please enter valid image
+                  </p>
+                )}
               </InputGroup>
             </FormGroup>
           </div>
+          <Container className="text-center">
+            <img
+              src={isPreImg}
+              alt={isPreImg}
+              className="w-20 text-center h-20 rounded-2xl"
+              hideZoom={true}
+              hideDownload={true}
+            />
+          </Container>
           <div className="mt-8 flex flex-col gap-y-4 w-96">
             <Button
               type="submit"
+              disabled={
+                !isFnameValid ||
+                !isLnameValid ||
+                !isEmailValid ||
+                !isPhoneValid ||
+                !isFileValid
+                  ? true
+                  : false
+              }
               className="text-white bg-green-500 text-lg font-bold py-3 rounded-xl active:scale-[.98] active:duration-75 transition-all hover:scale-[1.01] ease-in-out disabled:bg-slate-500 disabled:cursor-not-allowed"
             >
               Update

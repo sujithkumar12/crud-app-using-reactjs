@@ -12,25 +12,18 @@ import TableSortLabel from "@mui/material/TableSortLabel";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Paper from "@mui/material/Paper";
-import { FaEdit } from "react-icons/fa";
+import { FaEdit, FaFileCsv, FaFilePdf } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
 import ModalImage from "react-modal-image";
-import { Button, TextField } from "@mui/material";
+import { Button, grid2Classes, IconButton, TextField } from "@mui/material";
 import Modal from "./Modal/Modal";
 import idContext from "../../store/IdContext";
-import { MainURL } from "../../../variables/constants";
+import { headers, MainURL, pdfHeaders } from "../../../variables/constants";
 import axios from "axios";
-import { async } from "@firebase/util";
-
-function createData(name, email, phone, image, actions) {
-  return {
-    name,
-    email,
-    phone,
-    image,
-    actions,
-  };
-}
+import { toast, ToastContainer } from "react-toastify";
+import { exportCsv } from "../../store/Helper";
+import jsPDF from "jspdf";
+import autoTable from "jspdf-autotable";
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -43,7 +36,7 @@ function descendingComparator(a, b, orderBy) {
 }
 
 function getComparator(order, orderBy) {
-  return order === "desc"
+  return order === "asc"
     ? (a, b) => descendingComparator(a, b, orderBy)
     : (a, b) => -descendingComparator(a, b, orderBy);
 }
@@ -61,6 +54,12 @@ function stableSort(array, comparator) {
 }
 
 const headCells = [
+  {
+    id: "index",
+    numeric: false,
+    disablePadding: true,
+    label: "Index",
+  },
   {
     id: "name",
     numeric: false,
@@ -94,11 +93,6 @@ const headCells = [
 ];
 
 function EnhancedTableHead(props) {
-  const { order, orderBy, onRequestSort } = props;
-  const createSortHandler = (property) => (event) => {
-    onRequestSort(event, property);
-  };
-
   return (
     <TableHead>
       <TableRow>
@@ -113,15 +107,8 @@ function EnhancedTableHead(props) {
             key={headCell.id}
             align={headCell.numeric ? "right" : "left"}
             padding={headCell.disablePadding ? "none" : "normal"}
-            sortDirection={orderBy === headCell.id ? order : false}
           >
-            <TableSortLabel
-              active={orderBy === headCell.id}
-              direction={orderBy === headCell.id ? order : "asc"}
-              onClick={createSortHandler(headCell.id)}
-            >
-              {headCell.label}
-            </TableSortLabel>
+            <TableSortLabel>{headCell.label}</TableSortLabel>
           </TableCell>
         ))}
       </TableRow>
@@ -130,12 +117,7 @@ function EnhancedTableHead(props) {
 }
 
 export function EnhancedTableToolbar(props) {
-  const { numSelected, isAddModalOpen, searchFunction } = props;
-  // const [ isSearch, setIsSearch] = React.useState("");
-
-  // const searchHandle = (event) => {
-  //   setIsSearch(event.target.value);
-  // }
+  const { numSelected, isAddModalOpen } = props;
 
   return (
     <Toolbar
@@ -153,20 +135,24 @@ export function EnhancedTableToolbar(props) {
       }}
     >
       <Typography
-        sx={{ flex: "1 1 100%", fontFamily: "poppins" }}
+        sx={{
+          flex: "1 1 100%",
+          fontFamily: "poppins",
+          display: {
+            xs: "none",
+            sm: "none",
+            md: "block",
+            lg: "block",
+            xl: "block",
+          },
+        }}
         variant="h6"
         id="tableTitle"
         component="div"
       >
         Employees
       </Typography>
-      {/* <TextField
-        id="input-with-icon-textfield"
-        label="Search"
-        sx={{ flex: "1 1 40%" }}
-        variant="outlined"
-        onChange={(searchedVal) => searchFunction(searchedVal)}
-      /> */}
+      {props.children}
       <Button
         sx={{
           flex: "1 1 20%",
@@ -195,35 +181,41 @@ export default function EnhancedTable() {
   const [isAddModalOpen, setIsAddModalOpen] = React.useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = React.useState(false);
   const [editId, setIsEditid] = React.useState("");
+  const [editFname, setIsEditFname] = React.useState("");
+  const [editLname, setIsEditLname] = React.useState("");
+  const [editEmail, setIsEditEmail] = React.useState("");
+  const [editPhone, setIsEditPhone] = React.useState("");
+  const [editImage, setIsEditImage] = React.useState("");
   const [isRowLength, setIsRowLength] = React.useState(0);
-  const [searchterm, setSearchTerm] = React.useState("");
+  const [reducedValue, forceUpdate] = React.useReducer((x) => x + 1, 0);
 
-  // let URL = `${MainURL}/list_profile?page=0&limit=10`;
+  const userToken = localStorage.getItem("user-info");
 
-  // const fetchApiData = async(url) => {
-  //   try{
-  //     const res = await fetch(url);
-  //     const data = await res.json();
-  //     console.log(data);
-  //   } catch(err) {
-  //     console.log(err.message);
-  //   }
-  // }
-  
+  const toastOptions = {
+    position: "bottom-right",
+    autoClose: 8000,
+    pauseOnHover: true,
+    draggable: true,
+    theme: "dark",
+  };
+
   React.useEffect(() => {
-    fetch("http://localhost:8000/users")
-      .then((res) => {
-        return res.json();
-      })
-      .then((resp) => {
-        setEmpDataChange(resp);
-        setIsRowLength(resp.length);
+    axios({
+      url: `${MainURL}/list_profile`,
+      method: "get",
+      headers: {
+        autherization: userToken,
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => {
+        setEmpDataChange(response.data.responseData);
+        setIsRowLength(response.data.responseData.length);
       })
       .catch((err) => {
-        console.log(err.message);
+        toast.warn(err, toastOptions);
       });
-    // fetchApiData(URL);
-  }, []);
+  }, [reducedValue]);
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === "asc";
@@ -240,44 +232,144 @@ export default function EnhancedTable() {
     setPage(0);
   };
 
-  const editFunction = (id) => {
-    setIsEditModalOpen(true);
-    setIsEditid(id);
+  const handleExportCsv = () => {
+    exportCsv();
   };
 
-  const searchFunction = (searchedVal) => {
-    console.log(empDataChange)
-    const filteredRows = empDataChange().filter((row) => {
-      return row.fname.toLowerCase().includes(searchedVal.toLowerCase());
-    });
-    setSearchTerm(filteredRows);
-  }
+  const handleExportPdf = () => {
+    const doc = new jsPDF();
+
+    doc.text("Employees", 20, 10);
+    autoTable(doc, ({
+      theme: "grid",
+      body: empDataChange,
+      columns: pdfHeaders.map((c) => ({header: c.label, dataKey: c.id}))
+    }))
+    doc.save("crud-report");
+  };
+
+  const editFunction = (id, first_name, last_name, email, phone, image) => {
+    setIsEditModalOpen(true);
+    setIsEditid(id);
+    setIsEditFname(first_name);
+    setIsEditLname(last_name);
+    setIsEditEmail(email);
+    setIsEditPhone(phone);
+    setIsEditImage(image);
+  };
 
   const deleteFunction = (id) => {
     if (window.confirm("Do you want to remove?")) {
-      fetch("http://localhost:8000/users/" + id, {
+      fetch(`${MainURL}/delete_profile/${id}`, {
         method: "DELETE",
+        headers: {
+          autherization: userToken,
+        },
       })
         .then((resp) => {
-          window.location.reload();
-          alert("Data removed");
+          toast.success("Data removed", toastOptions);
+          forceUpdate();
         })
         .catch((err) => {
-          console.log(err.message);
+          toast.error(err.message, toastOptions);
         });
     }
   };
 
+  const searchHandle = (event) => {
+    if (event.target.value === "") {
+      forceUpdate(empDataChange);
+    }
+
+    axios({
+      url: `${MainURL}/search/${event.target.value}`,
+      method: "get",
+      headers: {
+        autherization: userToken,
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => {
+        if (response.data.responseCode === 200) {
+          setEmpDataChange(response.data.responseData);
+          setIsRowLength(response.data.responseData.length);
+        } else if (response.data.responseCode === 212) {
+          setEmpDataChange("");
+          setIsRowLength((response.data.responseData.length = 0));
+        } else {
+          toast.warn(response.data.responseMessage, toastOptions);
+        }
+      })
+      .catch((err) => {
+        toast.error(err, toastOptions);
+      });
+  };
+
   return (
-    <idContext.Provider value={editId}>
-      <Box sx={{ width: "100%" }}>
-        <Paper sx={{ width: "100%", mb: 2 }}>
+    <idContext.Provider
+      value={{ editId, editFname, editLname, editEmail, editPhone, editImage }}
+    >
+      <Box
+        sx={{
+          width: { sm: "100%", md: "100%" },
+        }}
+      >
+        <Paper
+          sx={{
+            width: {
+              xs: "100%",
+              sm: "100%",
+              md: "100%",
+              lg: "100%",
+              xl: "100%",
+            },
+            height: { xs: "100%" },
+            mb: 2,
+          }}
+        >
           <EnhancedTableToolbar
-            isAddModalOpen={() => setIsAddModalOpen(true)} 
-            searchFunction={searchFunction}
-          />
+            isAddModalOpen={() => setIsAddModalOpen(true)}
+            setEmpDataChange={setEmpDataChange}
+          >
+            <IconButton
+              sx={{
+                height: "3rem",
+                fontFamily: "poppins",
+                color: "black",
+                ":hover": { backgroundColor: "#fff", color: "#009387" },
+              }}
+              onClick={handleExportPdf}
+            >
+              <FaFilePdf />
+            </IconButton>
+            <IconButton
+              sx={{
+                // flex: "7%",
+                height: "3rem",
+                fontFamily: "poppins",
+                color: "black",
+                marginRight: "0.5rem",
+                ":hover": { backgroundColor: "#fff", color: "#009387" },
+              }}
+              onClick={handleExportCsv}
+            >
+              <FaFileCsv />
+            </IconButton>
+            <TextField
+              id="input-with-icon-textfield"
+              label="Search"
+              sx={{ flex: "1 1 40%" }}
+              variant="outlined"
+              onChange={searchHandle}
+            />
+          </EnhancedTableToolbar>
           <TableContainer>
-            <Table sx={{ minWidth: 750 }} aria-labelledby="tableTitle">
+            <Table
+              sx={{
+                overflow: "hidden",
+              }}
+              aria-labelledby="tableTitle"
+            >
               <EnhancedTableHead
                 order={order}
                 orderBy={orderBy}
@@ -285,20 +377,26 @@ export default function EnhancedTable() {
                 rowCount={setEmpDataChange.length}
               />
               <TableBody>
-                {empDataChange && 
+                {empDataChange &&
                   stableSort(empDataChange, getComparator(order, orderBy))
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map((row) => {
                       return (
-                        <TableRow hover tabIndex={-1} key={row.fname}>
+                        <TableRow hover tabIndex={-1} key={row.first_name}>
                           <TableCell padding="checkbox"></TableCell>
+                          <TableCell
+                            // align="right"
+                            sx={{ fontFamily: "poppins" }}
+                          >
+                            {row.index}
+                          </TableCell>
                           <TableCell
                             sx={{ fontFamily: "poppins" }}
                             component="th"
                             scope="row"
                             padding="none"
                           >
-                            {row.fname + " " + row.lname}
+                            {row.first_name + " " + row.last_name}
                           </TableCell>
                           <TableCell
                             align="right"
@@ -315,16 +413,26 @@ export default function EnhancedTable() {
                           <TableCell align="right">
                             <ModalImage
                               small={row.image}
-                              className="w-20 cursor-pointer text-left"
+                              className="w-20 cursor-pointer text-left h-20 rounded-2xl"
                               large={row.image}
-                              alt={row.fname + " " + row.lname}
+                              alt={row.first_name + " " + row.last_name}
                               hideZoom={true}
+                              hideDownload={true}
                             />
                           </TableCell>
                           <TableCell align="right">
                             <button
                               className="px-6 bg-teal-500 py-1 rounded"
-                              onClick={() => editFunction(row.id)}
+                              onClick={() =>
+                                editFunction(
+                                  row.id,
+                                  row.first_name,
+                                  row.last_name,
+                                  row.email,
+                                  row.phone,
+                                  row.image
+                                )
+                              }
                             >
                               <FaEdit color="#f2f2f2" />
                             </button>
@@ -356,9 +464,11 @@ export default function EnhancedTable() {
             onClosee={() => setIsEditModalOpen(false)}
             isAddModalOpen={isAddModalOpen}
             onClose={() => setIsAddModalOpen(false)}
+            forceUpdate={forceUpdate}
           />
         </Paper>
       </Box>
+      <ToastContainer />
     </idContext.Provider>
   );
 }

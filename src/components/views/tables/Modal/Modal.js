@@ -9,7 +9,7 @@ export default function Example({
   isAddModalOpen,
   onClose,
   isEditModalOpen,
-  onClosee,
+  onClosee, forceUpdate
 }) {
   const cancelButtonRef = useRef(null);
 
@@ -34,7 +34,7 @@ export default function Example({
             <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
           </Transition.Child>
 
-          <Container className="fixed inset-0 z-10 overflow-y-auto">
+          <Container className="fixed inset-0 z-10 overflow-y-auto mt-10">
             <div className="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
               <Transition.Child
                 as={Fragment}
@@ -53,7 +53,7 @@ export default function Example({
                   >
                     <AiOutlineCloseCircle />
                   </Dialog.Title>
-                  <AddForm />
+                  <AddForm onClose={onClose} forceUpdate={forceUpdate} />
                 </Dialog.Panel>
               </Transition.Child>
             </div>
@@ -81,7 +81,7 @@ export default function Example({
             <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
           </Transition.Child>
 
-          <Container className="fixed inset-0 z-10 overflow-y-auto">
+          <Container className="fixed inset-0 z-10 overflow-y-auto mt-5">
             <div className="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
               <Transition.Child
                 as={Fragment}
@@ -100,7 +100,7 @@ export default function Example({
                   >
                     <AiOutlineCloseCircle />
                   </Dialog.Title>
-                  <EditForm />
+                  <EditForm onClosee={onClosee} forceUpdate={forceUpdate} />
                 </Dialog.Panel>
               </Transition.Child>
             </div>
