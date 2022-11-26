@@ -15,10 +15,10 @@ import Paper from "@mui/material/Paper";
 import { FaEdit, FaFileCsv, FaFilePdf } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
 import ModalImage from "react-modal-image";
-import { Button, grid2Classes, IconButton, TextField } from "@mui/material";
+import { Button, css, IconButton, TextField } from "@mui/material";
 import Modal from "./Modal/Modal";
 import idContext from "../../store/IdContext";
-import { headers, MainURL, pdfHeaders } from "../../../variables/constants";
+import { MainURL, pdfHeaders } from "../../../variables/constants";
 import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
 import { exportCsv } from "../../store/Helper";
@@ -240,11 +240,11 @@ export default function EnhancedTable() {
     const doc = new jsPDF();
 
     doc.text("Employees", 20, 10);
-    autoTable(doc, ({
+    autoTable(doc, {
       theme: "grid",
       body: empDataChange,
-      columns: pdfHeaders.map((c) => ({header: c.label, dataKey: c.id}))
-    }))
+      columns: pdfHeaders.map((c) => ({ header: c.label, dataKey: c.id })),
+    });
     doc.save("crud-report");
   };
 
@@ -344,7 +344,6 @@ export default function EnhancedTable() {
             </IconButton>
             <IconButton
               sx={{
-                // flex: "7%",
                 height: "3rem",
                 fontFamily: "poppins",
                 color: "black",
@@ -356,9 +355,10 @@ export default function EnhancedTable() {
               <FaFileCsv />
             </IconButton>
             <TextField
-              id="input-with-icon-textfield"
               label="Search"
-              sx={{ flex: "1 1 40%" }}
+              sx={{ flex: "1 1 25%" }}
+              InputLabelProps={{ style: { fontFamily: "poppins" } }}
+              inputProps={{ style: { fontFamily: "poppins" } }}
               variant="outlined"
               onChange={searchHandle}
             />

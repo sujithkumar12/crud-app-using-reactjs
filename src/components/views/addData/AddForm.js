@@ -114,14 +114,14 @@ function AddForm({ onClose, forceUpdate }) {
 
   return (
     <Container>
-      <div className="bg-white px-10 pb-20 rounded-3xl mx-8">
-        <p className="font-medium text-lg text-gray-500">
+      <div className="bg-white px-10 rounded-3xl" style={{margin: "0rem 1rem 1rem 1rem", paddingBottom: "2rem"}}>
+        <p className="font-medium text-lg text-gray-500" style={{fontFamily: "poppins"}}>
           Please enter details.
         </p>
         <Form onSubmit={handleSubmit}>
-          <div className="mt-8">
-            <label className="text-lg font-medium">First Name</label>
-            <FormGroup className="w-96">
+          <div className="mt-3">
+            <label className="text-lg font-medium" style={{fontFamily: "poppins"}}>First Name</label>
+            <FormGroup style={{width: "100%"}}>
               <InputGroup
                 className="input-group-alternative mb-3"
                 style={{ position: "relative" }}
@@ -133,17 +133,18 @@ function AddForm({ onClose, forceUpdate }) {
                   value={data.first_name}
                   className="w-full border-2 border-gray-100 rounded-xl p-4 mt-1 bg-transparent"
                   onChange={handleChange}
+                  style={{fontFamily: "poppins"}}
                 />
                 {data.first_name && !isFnameValid && (
-                  <p className="ml-4 text-red-500 bg-transparent mt-1 text-sm">
+                  <p className="ml-4 text-red-500 bg-transparent mt-1 text-sm" style={{fontFamily: "poppins"}}>
                     Please enter valid name
                   </p>
                 )}
               </InputGroup>
             </FormGroup>
 
-            <label className="text-lg font-medium">Last name</label>
-            <FormGroup className="w-96">
+            <label className="text-lg font-medium" style={{fontFamily: "poppins"}}>Last name</label>
+            <FormGroup style={{width: "100%"}}>
               <InputGroup
                 className="input-group-alternative mb-3"
                 style={{ position: "relative" }}
@@ -155,17 +156,18 @@ function AddForm({ onClose, forceUpdate }) {
                   name="last_name"
                   className="w-full border-2 border-gray-100 rounded-xl p-4 mt-1 bg-transparent"
                   onChange={handleChange}
+                  style={{fontFamily: "poppins"}}
                 />
                 {data.last_name && !isLnameValid && (
-                  <p className="ml-4 text-red-500 bg-transparent mt-1 text-sm">
+                  <p className="ml-4 text-red-500 bg-transparent mt-1 text-sm" style={{fontFamily: "poppins"}}>
                     Please enter valid name
                   </p>
                 )}
               </InputGroup>
             </FormGroup>
 
-            <label className="text-lg font-medium">Email</label>
-            <FormGroup className="w-96">
+            <label className="text-lg font-medium" style={{fontFamily: "poppins"}}>Email</label>
+            <FormGroup style={{width: "100%"}}>
               <InputGroup
                 className="input-group-alternative mb-3"
                 style={{ position: "relative" }}
@@ -177,17 +179,18 @@ function AddForm({ onClose, forceUpdate }) {
                   value={data.email}
                   className="w-full border-2 border-gray-100 rounded-xl p-4 mt-1 bg-transparent"
                   onChange={handleChange}
+                  style={{fontFamily: "poppins"}}
                 />
                 {data.email && !isEmailValid && (
-                  <p className="ml-4 text-red-500 bg-transparent mt-1 text-sm">
+                  <p className="ml-4 text-red-500 bg-transparent mt-1 text-sm" style={{fontFamily: "poppins"}}>
                     Please enter valid email
                   </p>
                 )}
               </InputGroup>
             </FormGroup>
 
-            <label className="text-lg font-medium">Phone Number</label>
-            <FormGroup className="w-96">
+            <label className="text-lg font-medium" style={{fontFamily: "poppins"}}>Phone Number</label>
+            <FormGroup style={{width: "100%"}}>
               <InputGroup
                 className="input-group-alternative mb-3"
                 style={{ position: "relative" }}
@@ -201,17 +204,18 @@ function AddForm({ onClose, forceUpdate }) {
                   value={data.phone}
                   className="w-full border-2 border-gray-100 rounded-xl p-4 mt-1 bg-transparent"
                   onChange={handleChange}
+                  style={{fontFamily: "poppins"}}
                 />
                 {data.phone && !isPhoneValid && (
-                  <p className="ml-4 text-red-500 bg-transparent mt-1 text-sm">
+                  <p className="ml-4 text-red-500 bg-transparent mt-1 text-sm" style={{fontFamily: "poppins"}}>
                     Please enter valid phone number
                   </p>
                 )}
               </InputGroup>
             </FormGroup>
 
-            <Label className="text-lg font-medium">Upload Image</Label>
-            <FormGroup className="w-96">
+            <Label className="text-lg font-medium" style={{fontFamily: "poppins"}}>Upload Image</Label>
+            <FormGroup style={{width: "100%"}}>
               <InputGroup
                 className="input-group-alternative mb-3"
                 style={{ position: "relative" }}
@@ -223,9 +227,10 @@ function AddForm({ onClose, forceUpdate }) {
                   className="w-full border-2 border-gray-100 rounded-xl p-4 mt-1 bg-transparent"
                   onChange={handleFileChange}
                   required
+                  style={{fontFamily: "poppins"}}
                 />
                 {isFile && !isFileValid && (
-                  <p className="ml-4 text-red-500 bg-transparent mt-1 text-sm">
+                  <p className="ml-4 text-red-500 bg-transparent mt-1 text-sm" style={{fontFamily: "poppins"}}>
                     Please enter valid image file
                   </p>
                 )}
@@ -239,11 +244,13 @@ function AddForm({ onClose, forceUpdate }) {
               className="w-20 text-center h-20 rounded-2xl"
               hideZoom={true}
               hideDownload={true}
+              style={{fontFamily: "poppins"}}
             />
           </Container>
-          <div className="mt-8 flex flex-col gap-y-4 w-96">
+          <div className="mt-8 flex flex-col gap-y-4" style={{width: "100%"}}>
             <Button
               type="submit"
+              style={{fontFamily: "poppins"}}
               className="text-white bg-green-500 text-lg font-bold py-3 rounded-xl active:scale-[.98] active:duration-75 transition-all hover:scale-[1.01] ease-in-out disabled:bg-slate-500 disabled:cursor-not-allowed"
               disabled={
                 !isFnameValid ||

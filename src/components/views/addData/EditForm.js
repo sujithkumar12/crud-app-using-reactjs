@@ -140,13 +140,13 @@ function EditForm({ onClosee, forceUpdate }) {
 
   return (
     <Container>
-      <div className="bg-white px-10 pb-20 rounded-3xl mx-8">
-        <p className="font-medium text-lg text-gray-500">
+      <div className="bg-white px-10 pb-12 rounded-3xl mx-8">
+        <p className="font-medium text-lg text-gray-500" style={{fontFamily: "poppins"}}>
           Please enter details.
         </p>
         <form onSubmit={handleSubmit}>
-          <div className="mt-8">
-            <label className="text-lg font-medium">First Name</label>
+          <div className="mt-3">
+            <label className="text-lg font-medium" style={{fontFamily: "poppins"}}>First Name</label>
             <FormGroup className="w-96">
               <InputGroup
                 className="input-group-alternative mb-3"
@@ -159,17 +159,18 @@ function EditForm({ onClosee, forceUpdate }) {
                   value={fname}
                   className="w-full border-2 border-gray-100 rounded-xl p-4 mt-1 bg-transparent"
                   onChange={handleFnameChange}
+                  style={{fontFamily: "poppins"}}
                   required
                 />
                 {fname && !isFnameValid && (
-                  <p className="ml-4 text-red-500 bg-transparent mt-1 text-sm">
+                  <p className="ml-4 text-red-500 bg-transparent mt-1 text-sm" style={{fontFamily: "poppins"}}>
                     Please enter valid name
                   </p>
                 )}
               </InputGroup>
             </FormGroup>
 
-            <label className="text-lg font-medium">Last name</label>
+            <label className="text-lg font-medium" style={{fontFamily: "poppins"}}>Last name</label>
             <FormGroup className="w-96">
               <InputGroup
                 className="input-group-alternative mb-3"
@@ -182,17 +183,18 @@ function EditForm({ onClosee, forceUpdate }) {
                   name="lname"
                   className="w-full border-2 border-gray-100 rounded-xl p-4 mt-1 bg-transparent"
                   onChange={handleLnameChange}
+                  style={{fontFamily: "poppins"}}
                   required
                 />
                 {lname && !isLnameValid && (
-                  <p className="ml-4 text-red-500 bg-transparent mt-1 text-sm">
+                  <p className="ml-4 text-red-500 bg-transparent mt-1 text-sm" style={{fontFamily: "poppins"}}>
                     Please enter valid name
                   </p>
                 )}
               </InputGroup>
             </FormGroup>
 
-            <label className="text-lg font-medium">Email</label>
+            <label className="text-lg font-medium" style={{fontFamily: "poppins"}}>Email</label>
             <FormGroup className="w-96">
               <InputGroup
                 className="input-group-alternative mb-3"
@@ -205,17 +207,18 @@ function EditForm({ onClosee, forceUpdate }) {
                   value={email}
                   className="w-full border-2 border-gray-100 rounded-xl p-4 mt-1 bg-transparent"
                   onChange={handleEmailChange}
+                  style={{fontFamily: "poppins"}}
                   required
                 />
                 {email && !isEmailValid && (
-                  <p className="ml-4 text-red-500 bg-transparent mt-1 text-sm">
+                  <p className="ml-4 text-red-500 bg-transparent mt-1 text-sm" style={{fontFamily: "poppins"}}>
                     Please enter valid email
                   </p>
                 )}
               </InputGroup>
             </FormGroup>
 
-            <label className="text-lg font-medium">Phone Number</label>
+            <label className="text-lg font-medium" style={{fontFamily: "poppins"}}>Phone Number</label>
             <FormGroup className="w-96">
               <InputGroup
                 className="input-group-alternative mb-3"
@@ -231,17 +234,17 @@ function EditForm({ onClosee, forceUpdate }) {
                   required
                   maxLength={10}
                   minLength={10}
-                  // pattern="[0-9]{10}"
+                  style={{fontFamily: "poppins"}}
                 />
                 {isPhone && !isPhoneValid && (
-                  <p className="ml-4 text-red-500 bg-transparent mt-1 text-sm">
+                  <p className="ml-4 text-red-500 bg-transparent mt-1 text-sm" style={{fontFamily: "poppins"}}>
                     Please enter valid phone number
                   </p>
                 )}
               </InputGroup>
             </FormGroup>
 
-            <label className="text-lg font-medium">Upload Image</label>
+            <label className="text-lg font-medium" style={{fontFamily: "poppins"}}>Upload Image</label>
             <FormGroup className="w-96">
               <InputGroup
                 className="input-group-alternative mb-3"
@@ -253,9 +256,10 @@ function EditForm({ onClosee, forceUpdate }) {
                   accept="image/heic, image/jpeg, image/png, image/jpg"
                   className="w-full border-2 border-gray-100 rounded-xl p-4 mt-1 bg-transparent"
                   onChange={handleFileChange}
+                  style={{fontFamily: "poppins"}}
                 />
                 {isImage && !isFileValid && (
-                  <p className="ml-4 text-red-500 bg-transparent mt-1 text-sm">
+                  <p className="ml-4 text-red-500 bg-transparent mt-1 text-sm" style={{fontFamily: "poppins"}}>
                     Please enter valid image
                   </p>
                 )}
@@ -269,11 +273,13 @@ function EditForm({ onClosee, forceUpdate }) {
               className="w-20 text-center h-20 rounded-2xl"
               hideZoom={true}
               hideDownload={true}
+              style={{fontFamily: "poppins"}}
             />
           </Container>
           <div className="mt-8 flex flex-col gap-y-4 w-96">
             <Button
               type="submit"
+              style={{fontFamily: "poppins"}}
               disabled={
                 !isFnameValid ||
                 !isLnameValid ||

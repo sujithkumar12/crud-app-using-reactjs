@@ -2,7 +2,7 @@ import React from "react";
 
 const Content = (props) => {
   return (
-    <section className={`h-screen overflow-auto hero-section ${props.className}`}>
+    <section className={`hero-section overflow-x-hidden overflow-y-hidden ${props.className}`}>
       {props.children}
     </section>
   );

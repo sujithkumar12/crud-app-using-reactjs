@@ -112,6 +112,7 @@ export default function PersistentDrawerLeft(props) {
               textTransform: "capitalize",
               justifyContent: "end",
               marginLeft: "auto",
+              fontFamily: "poppins"
             }}
           >
             <MdOutlineLogout />
@@ -139,7 +140,7 @@ export default function PersistentDrawerLeft(props) {
               alt={Logo}
               className="w-15 h-10 text-left items-start origin-left"
             />
-            <p className="text-black origin-left text-xl font-medium">
+            <p className="text-black origin-left text-xl font-medium" style={{ fontFamily: "poppins" }}>
               Accelerlab
             </p>
           </div>
@@ -159,7 +160,7 @@ export default function PersistentDrawerLeft(props) {
                 <NavLink
                   tag={Link}
                   to={menu.page}
-                  className="text-black flex items-center gap-x-4 cursor-pointer font-bold p-2  rounded-md text-sm"
+                  className="text-black flex items-center gap-x-4 cursor-pointer font-bold p-2 rounded-md text-sm"
                 >
                   <img src={menu.src} alt="menu" />
                   <ListItemText primary={menu.title} />
@@ -169,37 +170,8 @@ export default function PersistentDrawerLeft(props) {
           ))}
         </List>
       </Drawer>
-      <Main open={open} sx={{padding: "0px", backgroundColor: "wheat"}}>
+      <Main open={open} sx={{padding: "0px", backgroundColor: "wheat"}} className="overflow-hidden">
         <DrawerHeader />
-        {/* <Typography paragraph sx={{padding: "24px"}}>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-          eiusmod tempor incididunt ut labore et dolore magna aliqua. Rhoncus
-          dolor purus non enim praesent elementum facilisis leo vel. Risus at
-          ultrices mi tempus imperdiet. Semper risus in hendrerit gravida rutrum
-          quisque non tellus. Convallis convallis tellus id interdum velit
-          laoreet id donec ultrices. Odio morbi quis commodo odio aenean sed
-          adipiscing. Amet nisl suscipit adipiscing bibendum est ultricies
-          integer quis. Cursus euismod quis viverra nibh cras. Metus vulputate
-          eu scelerisque felis imperdiet proin fermentum leo. Mauris commodo
-          quis imperdiet massa tincidunt. Cras tincidunt lobortis feugiat
-          vivamus at augue. At augue eget arcu dictum varius duis at consectetur
-          lorem. Velit sed ullamcorper morbi tincidunt. Lorem donec massa sapien
-          faucibus et molestie ac.
-        </Typography>
-        <Typography paragraph sx={{padding: "24px"}}>
-          Consequat mauris nunc congue nisi vitae suscipit. Fringilla est
-          ullamcorper eget nulla facilisi etiam dignissim diam. Pulvinar
-          elementum integer enim neque volutpat ac tincidunt. Ornare suspendisse
-          sed nisi lacus sed viverra tellus. Purus sit amet volutpat consequat
-          mauris. Elementum eu facilisis sed odio morbi. Euismod lacinia at quis
-          risus sed vulputate odio. Morbi tincidunt ornare massa eget egestas
-          purus viverra accumsan in. In hendrerit gravida rutrum quisque non
-          tellus orci ac. Pellentesque nec nam aliquam sem et tortor. Habitant
-          morbi tristique senectus et. Adipiscing elit duis tristique
-          sollicitudin nibh sit. Ornare aenean euismod elementum nisi quis
-          eleifend. Commodo viverra maecenas accumsan lacus vel facilisis. Nulla
-          posuere sollicitudin aliquam ultrices sagittis orci a.
-        </Typography> */}
         {props.children}
       </Main>
     </Box>
