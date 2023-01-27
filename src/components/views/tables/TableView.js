@@ -15,7 +15,7 @@ import Paper from "@mui/material/Paper";
 import { FaEdit, FaFileCsv, FaFilePdf } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
 import ModalImage from "react-modal-image";
-import { Button, css, IconButton, TextField } from "@mui/material";
+import { Button, IconButton, TextField } from "@mui/material";
 import Modal from "./Modal/Modal";
 import idContext from "../../store/IdContext";
 import { MainURL, pdfHeaders } from "../../../variables/constants";
@@ -238,14 +238,46 @@ export default function EnhancedTable() {
 
   const handleExportPdf = () => {
     const doc = new jsPDF();
-
-    doc.text("Employees", 20, 10);
+    
+    // doc.text("Employees", 20, 10);
     autoTable(doc, {
+      margin: {top: 20},
       theme: "grid",
       body: empDataChange,
-      columns: pdfHeaders.map((c) => ({ header: c.label, dataKey: c.id })),
+      bodyStyles: { minCellHeight: 15 },
+      columnStyles: {
+        0: { cellWidth: 14 },
+        1: { cellWidth: 23 },
+        2: { cellWidth: 23 },
+        3: { cellWidth: 30 },
+        4: { cellWidth: 45 },
+        5: { cellWidth: 35 },
+      },
+      styles: { minCellHeight: 1 },
+      columns: 
+      pdfHeaders.map((c) => ({ header: c.label, dataKey: c.id })),
+        // [
+        //   {header : "Index", dataKey: "index"},
+        //   {header: "First Name", dataKey: "first_name"},
+        //   {header: "Last Name", dataKey: "last_name"},
+        //   {header: "Phone Number", dataKey: "phone"},
+        //   {header: "Email", dataKey: "email"},
+        //   {header: "Image", dataKey: "image"}
+        // ],
+      didDrawCell: (data) => {
+        if (data.section === "body" && data.column.index === 5) {
+          doc.addImage(
+            data.cell.raw,
+            "JPEG, png, jpg, heic",
+            data.cell.x + 2,
+            data.cell.y + 2,
+            31.5,
+            25
+          );
+        }
+      },
     });
-    doc.save("crud-report");
+    doc.save("crud-report.pdf");
   };
 
   const editFunction = (id, first_name, last_name, email, phone, image) => {
@@ -340,7 +372,11 @@ export default function EnhancedTable() {
               }}
               onClick={handleExportPdf}
             >
+              {/* <PDFDownloadLink document={<PDFFile />} fileName="crud"> */}
+
               <FaFilePdf />
+              {/* <button><FaFilePdf /></button> */}
+              {/* </PDFDownloadLink> */}
             </IconButton>
             <IconButton
               sx={{
@@ -365,6 +401,7 @@ export default function EnhancedTable() {
           </EnhancedTableToolbar>
           <TableContainer>
             <Table
+              className="tableee pdfTable"
               sx={{
                 overflow: "hidden",
               }}
@@ -413,7 +450,7 @@ export default function EnhancedTable() {
                           <TableCell align="right">
                             <ModalImage
                               small={row.image}
-                              className="w-20 cursor-pointer text-left h-20 rounded-2xl"
+                              className="w-20 cursor-pointer text-left h-20 rounded-2xl imagge"
                               large={row.image}
                               alt={row.first_name + " " + row.last_name}
                               hideZoom={true}

@@ -140,14 +140,14 @@ function EditForm({ onClosee, forceUpdate }) {
 
   return (
     <Container>
-      <div className="bg-white px-10 pb-12 rounded-3xl mx-8">
+      <div className="bg-white px-10 rounded-3xl" style={{margin: "0rem 1rem 1rem 1rem", paddingBottom: "2rem"}}>
         <p className="font-medium text-lg text-gray-500" style={{fontFamily: "poppins"}}>
           Please enter details.
         </p>
         <form onSubmit={handleSubmit}>
           <div className="mt-3">
             <label className="text-lg font-medium" style={{fontFamily: "poppins"}}>First Name</label>
-            <FormGroup className="w-96">
+            <FormGroup style={{width: "100%"}}>
               <InputGroup
                 className="input-group-alternative mb-3"
                 style={{ position: "relative" }}
@@ -171,7 +171,7 @@ function EditForm({ onClosee, forceUpdate }) {
             </FormGroup>
 
             <label className="text-lg font-medium" style={{fontFamily: "poppins"}}>Last name</label>
-            <FormGroup className="w-96">
+            <FormGroup style={{width: "100%"}}>
               <InputGroup
                 className="input-group-alternative mb-3"
                 style={{ position: "relative" }}
@@ -195,7 +195,7 @@ function EditForm({ onClosee, forceUpdate }) {
             </FormGroup>
 
             <label className="text-lg font-medium" style={{fontFamily: "poppins"}}>Email</label>
-            <FormGroup className="w-96">
+            <FormGroup style={{width: "100%"}}>
               <InputGroup
                 className="input-group-alternative mb-3"
                 style={{ position: "relative" }}
@@ -219,7 +219,7 @@ function EditForm({ onClosee, forceUpdate }) {
             </FormGroup>
 
             <label className="text-lg font-medium" style={{fontFamily: "poppins"}}>Phone Number</label>
-            <FormGroup className="w-96">
+            <FormGroup style={{width: "100%"}}>
               <InputGroup
                 className="input-group-alternative mb-3"
                 style={{ position: "relative" }}
@@ -245,7 +245,7 @@ function EditForm({ onClosee, forceUpdate }) {
             </FormGroup>
 
             <label className="text-lg font-medium" style={{fontFamily: "poppins"}}>Upload Image</label>
-            <FormGroup className="w-96">
+            <FormGroup style={{width: "100%"}}>
               <InputGroup
                 className="input-group-alternative mb-3"
                 style={{ position: "relative" }}
@@ -271,12 +271,10 @@ function EditForm({ onClosee, forceUpdate }) {
               src={isPreImg}
               alt={isPreImg}
               className="w-20 text-center h-20 rounded-2xl"
-              hideZoom={true}
-              hideDownload={true}
               style={{fontFamily: "poppins"}}
             />
           </Container>
-          <div className="mt-8 flex flex-col gap-y-4 w-96">
+          <div className="mt-8 flex flex-col gap-y-4" style={{width: "100%"}}>
             <Button
               type="submit"
               style={{fontFamily: "poppins"}}

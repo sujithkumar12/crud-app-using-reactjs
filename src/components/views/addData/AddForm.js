@@ -242,8 +242,6 @@ function AddForm({ onClose, forceUpdate }) {
               src={isPreImg}
               alt={isPreImg}
               className="w-20 text-center h-20 rounded-2xl"
-              hideZoom={true}
-              hideDownload={true}
               style={{fontFamily: "poppins"}}
             />
           </Container>

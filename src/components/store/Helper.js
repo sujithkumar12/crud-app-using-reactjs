@@ -1,7 +1,10 @@
+import { TableHead } from "@mui/material";
 import axios from "axios";
 import { ExportToCsv } from "export-to-csv";
+import jsPDF from "jspdf";
 import { toast } from "react-toastify";
-import { headers, MainURL } from "../../variables/constants";
+import { Container, Table } from "reactstrap";
+import { headers, MainURL, pdfHeaders } from "../../variables/constants";
 
 // export csv function
 export const exportCsv = () => {

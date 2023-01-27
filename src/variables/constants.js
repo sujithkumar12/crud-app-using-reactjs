@@ -21,7 +21,7 @@ export const website =
 
 export const uploadURL = "https://vrittigroup.com:5000/data/uploads/";
 
-export const MainURL = "https://f90b-103-141-112-24.in.ngrok.io/api/user";
+export const MainURL = "https://4f71-103-141-112-24.in.ngrok.io/api/user";
 
 export const phone = /^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\./0-9]{9}$/;
 
@@ -212,8 +212,7 @@ export const pdfHeaders = [
     label: "Email",
   },
   {
-    id: "imagee",
+    id: "image",
     label: "Image",
-
   },
 ];
